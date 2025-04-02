@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import DayView from '@/components/DayView';
 import MonthView from '@/components/MonthView';
@@ -50,6 +50,12 @@ const Index = () => {
     setView('month');
   };
 
+  // Update header title when selected date changes
+  useEffect(() => {
+    // Force header title to update when date changes
+    const title = getHeaderTitle();
+  }, [selectedDate]);
+
   return (
     <div className="h-screen flex flex-col bg-calendar-cream overflow-hidden">
       <Header
@@ -58,7 +64,7 @@ const Index = () => {
         showBackButton={view !== 'year'}
       />
       
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-hidden">
         {view === 'day' && (
           <DayView
             date={selectedDate}

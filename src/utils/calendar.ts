@@ -10,10 +10,12 @@ export function getSolarInfo(date: Date = new Date()) {
     day: solar.getDay(),
     weekday: solar.getWeek(),
     weekdayInChinese: "日一二三四五六".charAt(solar.getWeek()),
+    hour: date.getHours(),
+    minute: date.getMinutes(),
   };
 }
 
-// Get Lunar calendar info
+// Get Lunar calendar info with time information
 export function getLunarInfo(date: Date = new Date()) {
   const lunar = Lunar.fromDate(date);
   return {
@@ -23,11 +25,44 @@ export function getLunarInfo(date: Date = new Date()) {
     yearInGanZhi: lunar.getYearInGanZhi(),
     monthInGanZhi: lunar.getMonthInGanZhi(),
     dayInGanZhi: lunar.getDayInGanZhi(),
+    timeInGanZhi: getTimeGanZhi(date),
     yearInChinese: lunar.getYearInChinese(),
     monthInChinese: lunar.getMonthInChinese(),
     dayInChinese: lunar.getDayInChinese(),
     festivals: getFestivals(date),
     jieQi: lunar.getJieQi(),
+  };
+}
+
+// Get the Heavenly Stem and Earthly Branch for the current time
+function getTimeGanZhi(date: Date) {
+  const lunar = Lunar.fromDate(date);
+  const timeZhi = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+  
+  // Traditional Chinese time system divides a day into 12 two-hour periods
+  const hour = date.getHours();
+  const timeIndex = Math.floor((hour + 1) / 2) % 12;
+  
+  // Get the Heavenly Stem for the time based on the day's stem
+  const dayStem = lunar.getDayInGanZhi().charAt(0);
+  const stemIndex = "甲乙丙丁戊己庚辛壬癸".indexOf(dayStem);
+  
+  // Calculate the time stem based on the day stem
+  // The rule is: 甲己-甲, 乙庚-丙, 丙辛-戊, 丁壬-庚, 戊癸-壬
+  const stemMap = [0, 2, 4, 6, 8]; // Starting stem index for each day stem group
+  const stemGroupIndex = stemIndex % 5;
+  const startingStemIndex = stemMap[stemGroupIndex];
+  
+  const timeGan = "甲乙丙丁戊己庚辛壬癸"[(startingStemIndex + timeIndex) % 10];
+  const timeZhiChar = timeZhi[timeIndex];
+  
+  // Get Chinese time name
+  const timeNames = ["夜半", "鸡鸣", "平旦", "日出", "食时", "隅中", "日中", "日昳", "哺时", "日入", "黄昏", "人定"];
+  
+  return {
+    ganZhi: timeGan + timeZhiChar,
+    timeName: timeNames[timeIndex],
+    hourRange: `${(timeIndex * 2 - 1 + 24) % 24}-${(timeIndex * 2 + 1) % 24}点`,
   };
 }
 
