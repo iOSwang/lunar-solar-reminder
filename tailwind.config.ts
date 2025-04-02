@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom calendar colors
+				calendar: {
+					red: '#C53131',
+					gold: '#D9A84E',
+					cream: '#F5F2EB',
+					darkRed: '#8B1818',
+					lightGold: '#F5E7C9',
 				}
 			},
 			borderRadius: {
