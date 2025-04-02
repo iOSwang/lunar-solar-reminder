@@ -22,25 +22,33 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
   return (
     <ScrollArea className="h-full">
       <div className="flex flex-col min-h-full">
-        <div className="bg-calendar-red text-white p-4 rounded-b-2xl shadow-md">
-          <div className="text-center mb-3">
-            <div className="text-sm opacity-80">{solar.year}年{solar.month}月</div>
-            <div className="text-5xl font-bold mb-1">{solar.day}</div>
-            <div className="text-sm">{weekdays[solar.weekday]}</div>
-            <div className="text-xs mt-1">{solar.hour.toString().padStart(2, '0')}:{solar.minute.toString().padStart(2, '0')}</div>
+        <div className="bg-calendar-red text-white px-4 py-3 rounded-b-2xl shadow-md">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="text-sm opacity-80">{solar.year}年{solar.month}月{solar.day}日</div>
+              <div className="text-2xl font-bold">{weekdays[solar.weekday]}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-xl font-medium">{solar.hour.toString().padStart(2, '0')}:{solar.minute.toString().padStart(2, '0')}</div>
+              <div className="text-xs opacity-80">{lunar.timeInGanZhi.timeName}时</div>
+            </div>
           </div>
           
-          <Card className="bg-white/10 backdrop-blur-sm text-white border-0 p-3 mb-2">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="text-center">
+          <Card className="bg-white/10 backdrop-blur-sm text-white border-0 p-2 mb-1">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
                 <div className="text-xs opacity-80">农历</div>
-                <div className="text-base font-medium">{lunar.monthInChinese}月{lunar.dayInChinese}</div>
-                <div className="text-xs">{lunar.yearInChinese}年</div>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-base font-medium">{lunar.monthInChinese}月{lunar.dayInChinese}</span>
+                  <span className="text-xs">({lunar.yearInChinese}年)</span>
+                </div>
               </div>
-              <div className="text-center border-l border-white/30">
-                <div className="text-xs opacity-80">干支</div>
-                <div className="text-base font-medium">{lunar.dayInGanZhi}</div>
-                <div className="text-xs">{lunar.yearInGanZhi}年</div>
+              <div className="border-l border-white/30 pl-2">
+                <div className="text-xs opacity-80">天干地支</div>
+                <div className="text-xs">
+                  <div>日: {lunar.dayInGanZhi}</div>
+                  <div>时: {lunar.timeInGanZhi.ganZhi}</div>
+                </div>
               </div>
             </div>
           </Card>
@@ -50,16 +58,28 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
           <Card className="mb-3">
             <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm flex items-center">
               <Clock className="h-4 w-4 mr-1" />
-              时辰
+              干支信息
             </div>
-            <div className="p-3">
-              <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium">当前时辰：</span>
-                <span className="text-sm">{lunar.timeInGanZhi.timeName} ({lunar.timeInGanZhi.hourRange})</span>
+            <div className="p-3 grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <div className="font-medium">年干支:</div>
+                <div>{lunar.yearInGanZhi}</div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-sm font-medium">时辰干支：</span>
-                <span className="text-sm">{lunar.timeInGanZhi.ganZhi}</span>
+              <div>
+                <div className="font-medium">月干支:</div>
+                <div>{lunar.monthInGanZhi}</div>
+              </div>
+              <div>
+                <div className="font-medium">日干支:</div>
+                <div>{lunar.dayInGanZhi}</div>
+              </div>
+              <div>
+                <div className="font-medium">时干支:</div>
+                <div>{lunar.timeInGanZhi.ganZhi}</div>
+              </div>
+              <div>
+                <div className="font-medium">当前时辰:</div>
+                <div>{lunar.timeInGanZhi.timeName} ({lunar.timeInGanZhi.hourRange})</div>
               </div>
             </div>
           </Card>
