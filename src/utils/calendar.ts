@@ -36,13 +36,19 @@ function getFestivals(date: Date) {
   const solar = Solar.fromDate(date);
   const lunar = Lunar.fromDate(date);
   
-  // Fix: Use the correct API methods for getting holidays
-  const solarFestivals = HolidayUtil.fetch(solar.toYmd(), true);
-  const lunarFestivals = HolidayUtil.fetch(lunar.toYmd(), false);
+  // Fixed: Use the correct methods to get solar and lunar festivals
+  const solarFestivals = solar.getFestivals();
+  const lunarFestivals = lunar.getFestivals();
+  
+  // Also get potential holidays for the date
+  const jieQi = lunar.getJieQi();
+  const otherFestivals = lunar.getOtherFestivals();
   
   return {
     solar: solarFestivals || [],
     lunar: lunarFestivals || [],
+    jieQi: jieQi ? [jieQi] : [],
+    other: otherFestivals || []
   };
 }
 
