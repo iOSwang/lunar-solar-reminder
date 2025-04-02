@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { getUserProfile, updateUserProfile } from '@/utils/userService';
 import { useToast } from "@/hooks/use-toast";
-import { User, Phone, Mail, Save } from "lucide-react";
+import { User, Phone, Mail, Save, Trash2, Bell } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getAllReminders, deleteReminder, Reminder } from '@/utils/reminderService';
 import { format } from 'date-fns';
