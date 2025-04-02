@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getSolarInfo, getLunarInfo, getDayActivities } from '@/utils/calendar';
 import { Separator } from "@/components/ui/separator";
-import { Bell, Mail, Clock } from "lucide-react";
+import { Bell, Mail, Clock, Trash2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getRemindersForDate, deleteReminder, Reminder } from '@/utils/reminderService';
+import { format } from 'date-fns';
+import { useToast } from "@/hooks/use-toast";
 
 interface DayViewProps {
   date: Date;
@@ -16,25 +19,34 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
   const solar = getSolarInfo(date);
   const lunar = getLunarInfo(date);
   const activities = getDayActivities(date);
+  const reminders = getRemindersForDate(date);
+  const { toast } = useToast();
   
   const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+
+  const handleDeleteReminder = (reminder: Reminder) => {
+    if (deleteReminder(reminder.id)) {
+      toast({
+        title: "提醒已删除",
+        description: reminder.title,
+      });
+      // Force rerender
+      window.dispatchEvent(new Event('storage'));
+    }
+  };
 
   return (
     <ScrollArea className="h-full">
       <div className="flex flex-col min-h-full">
         <div className="bg-calendar-red text-white px-4 py-3 rounded-b-2xl shadow-md">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm opacity-80">{solar.year}年{solar.month}月{solar.day}日</div>
-              <div className="text-2xl font-bold">{weekdays[solar.weekday]}</div>
-            </div>
-            <div className="text-right">
-              <div className="text-xl font-medium">{solar.hour.toString().padStart(2, '0')}:{solar.minute.toString().padStart(2, '0')}</div>
-              <div className="text-xs opacity-80">{lunar.timeInGanZhi.timeName}时</div>
+              <div className="text-sm opacity-80">{solar.year}年{solar.month}月{solar.day}日 {solar.hour.toString().padStart(2, '0')}:{solar.minute.toString().padStart(2, '0')}</div>
+              <div className="text-xl font-bold">{weekdays[solar.weekday]} ({lunar.timeInGanZhi.timeName}时)</div>
             </div>
           </div>
           
-          <Card className="bg-white/10 backdrop-blur-sm text-white border-0 p-2 mb-1">
+          <Card className="bg-white/10 backdrop-blur-sm text-white border-0 p-2 mt-2">
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <div className="text-xs opacity-80">农历</div>
@@ -156,9 +168,49 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
           )}
 
           <Card className="mb-3">
-            <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm">当日提醒</div>
-            <div className="p-3 text-center text-muted-foreground text-sm">
-              暂无提醒事项
+            <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm flex items-center justify-between">
+              <span>当日提醒</span>
+              <Button variant="ghost" size="sm" className="h-7 px-2" onClick={onAddReminder}>
+                添加
+              </Button>
+            </div>
+            <div className="p-3">
+              {reminders.length > 0 ? (
+                <div className="space-y-2">
+                  {reminders.map((reminder) => (
+                    <div key={reminder.id} className="bg-slate-50 p-2 rounded flex justify-between items-start">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm">{reminder.title}</span>
+                          {reminder.notificationType === 'sms' ? (
+                            <Bell className="h-3 w-3 text-amber-500" />
+                          ) : (
+                            <Mail className="h-3 w-3 text-blue-500" />
+                          )}
+                        </div>
+                        {reminder.content && (
+                          <div className="text-xs text-muted-foreground mt-1">{reminder.content}</div>
+                        )}
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          {format(new Date(reminder.createdAt), 'MM-dd HH:mm')} 创建
+                        </div>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 text-muted-foreground"
+                        onClick={() => handleDeleteReminder(reminder)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-muted-foreground text-sm">
+                  暂无提醒事项
+                </div>
+              )}
             </div>
           </Card>
         </div>

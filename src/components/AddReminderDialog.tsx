@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Bell, Mail } from "lucide-react";
 import { format } from 'date-fns';
 import { useToast } from "@/hooks/use-toast";
+import { addReminder } from '@/utils/reminderService';
 
 interface AddReminderDialogProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ const AddReminderDialog: React.FC<AddReminderDialogProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [notificationType, setNotificationType] = useState('sms');
+  const [notificationType, setNotificationType] = useState<'sms' | 'email'>('sms');
   const { toast } = useToast();
   
   const handleSubmit = (e: React.FormEvent) => {
@@ -37,11 +38,23 @@ const AddReminderDialog: React.FC<AddReminderDialogProps> = ({
       return;
     }
     
-    // In a real app, we'd save the reminder to a database here
+    // Save the reminder using our service
+    addReminder({
+      title,
+      content,
+      date,
+      notificationType
+    });
+    
     toast({
       title: "提醒已添加",
       description: `${format(date, 'yyyy-MM-dd')} - ${title}`
     });
+    
+    // Reset form
+    setTitle('');
+    setContent('');
+    setNotificationType('sms');
     
     onClose();
   };
@@ -79,7 +92,7 @@ const AddReminderDialog: React.FC<AddReminderDialogProps> = ({
             <Label>提醒方式</Label>
             <RadioGroup 
               value={notificationType}
-              onValueChange={setNotificationType}
+              onValueChange={(value: 'sms' | 'email') => setNotificationType(value)}
               className="flex flex-col space-y-1"
             >
               <div className="flex items-center space-x-2">

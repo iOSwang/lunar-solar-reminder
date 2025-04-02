@@ -5,6 +5,7 @@ import DayView from '@/components/DayView';
 import MonthView from '@/components/MonthView';
 import YearView from '@/components/YearView';
 import AddReminderDialog from '@/components/AddReminderDialog';
+import BottomNav from '@/components/BottomNav';
 
 type CalendarView = 'day' | 'month' | 'year';
 
@@ -50,11 +51,16 @@ const Index = () => {
     setView('month');
   };
 
-  // Update header title when selected date changes
+  // Force refresh when localStorage changes (for reminders)
   useEffect(() => {
-    // Force header title to update when date changes
-    const title = getHeaderTitle();
-  }, [selectedDate]);
+    const handleStorageChange = () => {
+      // Force re-render
+      setSelectedDate(prev => new Date(prev.getTime()));
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <div className="h-screen flex flex-col bg-calendar-cream overflow-hidden">
@@ -94,6 +100,8 @@ const Index = () => {
         onClose={() => setIsAddReminderOpen(false)}
         date={selectedDate}
       />
+      
+      <BottomNav />
     </div>
   );
 };
