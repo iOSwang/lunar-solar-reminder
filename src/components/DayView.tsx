@@ -38,7 +38,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
   return (
     <ScrollArea className="h-full">
       <div className="flex flex-col min-h-full">
-        <div className="bg-calendar-red text-white px-4 py-3 rounded-b-2xl shadow-md">
+        <div className="bg-calendar-red text-white px-4 py-4 rounded-b-2xl shadow-md mb-3">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm opacity-80">{solar.year}年{solar.month}月{solar.day}日 {solar.hour.toString().padStart(2, '0')}:{solar.minute.toString().padStart(2, '0')}</div>
@@ -46,8 +46,8 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
             </div>
           </div>
           
-          <Card className="bg-white/10 backdrop-blur-sm text-white border-0 p-2 mt-2">
-            <div className="grid grid-cols-2 gap-2">
+          <Card className="bg-white/10 backdrop-blur-sm text-white border-0 p-3 mt-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <div className="text-xs opacity-80">农历</div>
                 <div className="flex items-baseline gap-1">
@@ -55,7 +55,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
                   <span className="text-xs">({lunar.yearInChinese}年)</span>
                 </div>
               </div>
-              <div className="border-l border-white/30 pl-2">
+              <div className="border-l border-white/30 pl-3">
                 <div className="text-xs opacity-80">天干地支</div>
                 <div className="text-xs">
                   <div>日: {lunar.dayInGanZhi}</div>
@@ -66,13 +66,13 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
           </Card>
         </div>
         
-        <div className="flex-1 p-3 overflow-y-auto">
-          <Card className="mb-3">
+        <div className="px-4 pb-4 space-y-4">
+          <Card className="shadow-sm">
             <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm flex items-center">
               <Clock className="h-4 w-4 mr-1" />
               干支信息
             </div>
-            <div className="p-3 grid grid-cols-2 gap-2 text-sm">
+            <div className="p-3 grid grid-cols-2 gap-3 text-sm">
               <div>
                 <div className="font-medium">年干支:</div>
                 <div>{lunar.yearInGanZhi}</div>
@@ -89,7 +89,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
                 <div className="font-medium">时干支:</div>
                 <div>{lunar.timeInGanZhi.ganZhi}</div>
               </div>
-              <div>
+              <div className="col-span-2">
                 <div className="font-medium">当前时辰:</div>
                 <div>{lunar.timeInGanZhi.timeName} ({lunar.timeInGanZhi.hourRange})</div>
               </div>
@@ -97,7 +97,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
           </Card>
           
           {lunar.jieQi && (
-            <Card className="mb-3">
+            <Card className="shadow-sm">
               <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm">节气</div>
               <div className="p-3 flex items-center justify-center">
                 <span className="px-4 py-1.5 bg-orange-50 text-orange-700 rounded-full text-sm">
@@ -107,16 +107,16 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
             </Card>
           )}
 
-          <Card className="mb-3">
+          <Card className="shadow-sm">
             <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm">宜忌</div>
             <div className="p-3">
-              <div className="mb-2">
-                <div className="text-xs text-muted-foreground mb-1">宜</div>
-                <div className="flex flex-wrap gap-1.5">
+              <div className="mb-3">
+                <div className="text-xs text-muted-foreground mb-2">宜</div>
+                <div className="flex flex-wrap gap-2">
                   {activities.auspicious.map((item, index) => (
                     <span 
                       key={index}
-                      className="px-2 py-0.5 bg-green-50 text-green-700 rounded-full text-xs"
+                      className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs"
                     >
                       {item}
                     </span>
@@ -124,12 +124,12 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
                 </div>
               </div>
               <div>
-                <div className="text-xs text-muted-foreground mb-1">忌</div>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="text-xs text-muted-foreground mb-2">忌</div>
+                <div className="flex flex-wrap gap-2">
                   {activities.inauspicious.map((item, index) => (
                     <span 
                       key={index}
-                      className="px-2 py-0.5 bg-red-50 text-red-700 rounded-full text-xs"
+                      className="px-3 py-1 bg-red-50 text-red-700 rounded-full text-xs"
                     >
                       {item}
                     </span>
@@ -143,22 +143,22 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
           {(lunar.festivals.solar.length > 0 || 
             lunar.festivals.lunar.length > 0 || 
             lunar.festivals.other.length > 0) && (
-            <Card className="mb-3">
+            <Card className="shadow-sm">
               <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm">节日</div>
               <div className="p-3">
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {lunar.festivals.solar.map((festival, index) => (
-                    <span key={`solar-${index}`} className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs">
+                    <span key={`solar-${index}`} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs">
                       {festival}
                     </span>
                   ))}
                   {lunar.festivals.lunar.map((festival, index) => (
-                    <span key={`lunar-${index}`} className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded-full text-xs">
+                    <span key={`lunar-${index}`} className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs">
                       {festival}
                     </span>
                   ))}
                   {lunar.festivals.other.map((festival, index) => (
-                    <span key={`other-${index}`} className="px-2 py-0.5 bg-amber-50 text-amber-700 rounded-full text-xs">
+                    <span key={`other-${index}`} className="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs">
                       {festival}
                     </span>
                   ))}
@@ -167,7 +167,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
             </Card>
           )}
 
-          <Card className="mb-3">
+          <Card className="shadow-sm">
             <div className="bg-calendar-lightGold px-3 py-2 font-medium text-sm flex items-center justify-between">
               <span>当日提醒</span>
               <Button variant="ghost" size="sm" className="h-7 px-2" onClick={onAddReminder}>
@@ -178,7 +178,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
               {reminders.length > 0 ? (
                 <div className="space-y-2">
                   {reminders.map((reminder) => (
-                    <div key={reminder.id} className="bg-slate-50 p-2 rounded flex justify-between items-start">
+                    <div key={reminder.id} className="bg-slate-50 p-3 rounded-lg flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-sm">{reminder.title}</span>
@@ -207,7 +207,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-muted-foreground text-sm">
+                <div className="text-center text-muted-foreground text-sm py-3">
                   暂无提醒事项
                 </div>
               )}
@@ -215,7 +215,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onAddReminder }) => {
           </Card>
         </div>
         
-        <div className="p-3 border-t">
+        <div className="p-4 border-t mt-auto">
           <Button 
             onClick={onAddReminder}
             className="w-full bg-calendar-red hover:bg-calendar-darkRed text-white"

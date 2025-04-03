@@ -5,12 +5,14 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { getAllReminders, deleteReminder, Reminder } from '@/utils/reminderService';
 import { format } from 'date-fns';
 import { useToast } from "@/hooks/use-toast";
-import { Bell, Mail, Trash2, Calendar } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Bell, Mail, Trash2 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
+import Header from '@/components/Header';
 
 const Reminders = () => {
   const [reminders, setReminders] = useState<Reminder[]>([]);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Load all reminders
@@ -61,19 +63,11 @@ const Reminders = () => {
   };
 
   return (
-    <ScrollArea className="h-full">
-      <div className="flex flex-col min-h-full">
-        <div className="bg-calendar-lightGold p-3 border-b sticky top-0 z-10 flex justify-between items-center">
-          <h2 className="text-lg font-medium">所有提醒</h2>
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/">
-              <Calendar className="h-4 w-4 mr-1" />
-              返回日历
-            </Link>
-          </Button>
-        </div>
-        
-        <div className="p-3">
+    <div className="flex flex-col h-full">
+      <Header title="所有提醒" onBack={() => navigate('/')} />
+      
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-3">
           {reminders.length > 0 ? (
             <div className="space-y-3">
               {reminders.map((reminder) => (
@@ -114,8 +108,8 @@ const Reminders = () => {
             </div>
           )}
         </div>
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    </div>
   );
 };
 
