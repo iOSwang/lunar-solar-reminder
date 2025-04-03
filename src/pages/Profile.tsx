@@ -12,6 +12,7 @@ import { getAllReminders, deleteReminder, Reminder } from '@/utils/reminderServi
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
+import BottomNav from '@/components/BottomNav';
 
 const Profile = () => {
   const [phone, setPhone] = useState('');
@@ -81,7 +82,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="h-screen flex flex-col bg-calendar-cream overflow-hidden">
       <Header title="我的" onBack={() => navigate('/')} />
       
       <ScrollArea className="flex-1">
@@ -176,6 +177,8 @@ const Profile = () => {
           </Card>
         </div>
       </ScrollArea>
+
+      <BottomNav />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Bell, Mail, Trash2 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
+import BottomNav from '@/components/BottomNav';
 
 const Reminders = () => {
   const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -63,7 +65,7 @@ const Reminders = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="h-screen flex flex-col bg-calendar-cream overflow-hidden">
       <Header title="所有提醒" onBack={() => navigate('/')} />
       
       <ScrollArea className="flex-1">
@@ -109,6 +111,8 @@ const Reminders = () => {
           )}
         </div>
       </ScrollArea>
+
+      <BottomNav />
     </div>
   );
 };
